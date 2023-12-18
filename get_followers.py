@@ -41,5 +41,9 @@ def get_follower_count_route():
   else:
     return "No LinkedIn URL provided", 400
 
+@app.route('/', methods=['GET'])
+def hello_world():
+  return "Hello, World!"
+
 if __name__ == "__main__":
   app.run(port=os.environ.get('PORT', 5000))

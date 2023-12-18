@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 import re
 from urllib.parse import quote_plus
+import os
 
 app = Flask(__name__)
 
@@ -41,4 +42,4 @@ def get_follower_count_route():
     return "No LinkedIn URL provided", 400
 
 if __name__ == "__main__":
-  app.run(port=5000)
+  app.run(port=os.environ.get('PORT', 5000))

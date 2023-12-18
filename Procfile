@@ -1,1 +1,1 @@
-web: python get_followers.py
+web: gunicorn wsgi:app

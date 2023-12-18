@@ -32,14 +32,14 @@ app = Flask(__name__)
 #     driver.quit()
 #     return 0
 
-@app.route('/get_follower_count', methods=['GET'])
-def get_follower_count_route():
-  linkedin_url = request.args.get('linkedin_url')
-  if linkedin_url:
-    follower_count = get_follower_count(linkedin_url)
-    return str(follower_count)
-  else:
-    return "No LinkedIn URL provided", 400
+# @app.route('/get_follower_count', methods=['GET'])
+# def get_follower_count_route():
+#   linkedin_url = request.args.get('linkedin_url')
+#   if linkedin_url:
+#     follower_count = get_follower_count(linkedin_url)
+#     return str(follower_count)
+#   else:
+#     return "No LinkedIn URL provided", 400
 
 @app.route('/', methods=['GET'])
 def hello_world():

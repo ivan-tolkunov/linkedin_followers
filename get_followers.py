@@ -1,19 +1,11 @@
+from flask import Flask, request
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-import time
-import random
 import re
 from urllib.parse import quote_plus
 
-def read_csv_file(file_name):
-  file = open(file_name, "r")
-  data = file.read()
-  lines = data.split("\n")
-  result = []
-  for line in lines:
-    result.append(line.split(","))
-  return result
+app = Flask(__name__)
 
 def get_follower_count(linkedin):
   # Setup webdriver
@@ -32,19 +24,21 @@ def get_follower_count(linkedin):
   # Search for the follower count in the HTML content
   match = re.search(r'\s*\d+(.\d+)?(K|M)?\+\s*followers', html_content)
 
-  # If a match is found, print it. Otherwise, print "No match found"
   if match:
-    print(match.group())
+    driver.quit()
+    return match.group()
   else:
-    print("No match found")
+    driver.quit()
+    return 0
 
-  # Close the browser
-  driver.quit()
+@app.route('/get_follower_count', methods=['GET'])
+def get_follower_count_route():
+  linkedin_url = request.args.get('linkedin_url')
+  if linkedin_url:
+    follower_count = get_follower_count(linkedin_url)
+    return str(follower_count)
+  else:
+    return "No LinkedIn URL provided", 400
 
-urls = read_csv_file("./test.csv")
-
-for url in urls:
-  print(url[0])
-  follower_count = get_follower_count(url[0])
-  print(follower_count)
-  time.sleep(random.uniform(10, 30)) 
+if __name__ == "__main__":
+  app.run(port=5000)

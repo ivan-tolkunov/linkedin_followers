@@ -1,1 +1,1 @@
-worker: python get_followers.py
+web: python get_followers.py

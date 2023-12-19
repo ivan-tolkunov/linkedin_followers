@@ -1,4 +1,9 @@
+Flask
+Flask-RESTful
+gunicorn
+itsdangerous
+Jinja2
+peewee
+Werkzeug
 selenium
 webdriver_manager
-flask
-gunicorn

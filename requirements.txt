@@ -7,3 +7,4 @@ peewee
 Werkzeug
 selenium
 webdriver_manager
+BeautifulSoup

@@ -5,6 +5,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from urllib.parse import quote_plus
 import re
 import os
+from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
@@ -54,9 +55,43 @@ def get_follower_count_route():
   linkedin_url = request.args.get('linkedin_url')
   if linkedin_url:
     follower_count = get_follower_count(linkedin_url)
-    return {"follower_count": follower_count}
+    img_link = get_img(linkedin_url)
+    return {"follower_count": follower_count,
+            "profile_img_link": img_link    }
   else:
     return "No LinkedIn URL provided", 400
+
+def get_img(linkedin):
+    driver = create_driver()
+    try:
+        driver.get(linkedin)
+
+        driver.implicitly_wait(5)
+
+        html_content = driver.page_source
+
+        if html_content:
+            soup = BeautifulSoup(html_content, 'html.parser')
+            divs = soup.find_all("div", {"class": "contextual-sign-in-modal__screen contextual-sign-in-modal__context-screen flex flex-col my-4 mx-3"})
+            img_link = img_from_divs(divs)
+            return img_link[0]
+        
+        return "No HTML content found"
+    finally:
+        driver.quit()
+
+def img_from_divs(divs):
+    images = []
+    for div in divs:
+        img_tags = div.find_all('img')
+        for img in img_tags:
+            if img.has_attr('src'):
+                images.append(img['src'])
+    if len(images) == 0: 
+       return "No images found"
+   
+    return images
+   
 
 if __name__ == '__main__': 
    app.run(debug=True)

@@ -89,7 +89,7 @@ def get_image_hash(img_url):
     img_path = download_image(img_url)
     return imagehash.phash(Image.open(img_path))
 
-@app.route('/get_follower_count', methods=['GET'])
+@app.route('/get_linkedin_info', methods=['GET'])
 def get_follower_count_route():
   linkedin_url = request.args.get('linkedin_url')
   if linkedin_url:
